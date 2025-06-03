@@ -30,9 +30,8 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Flask
 - Redis
 - Docker
-- Kubernetes
-
-
+- Kuberneter
+  
 ##📝 Podsumowanie
 ## 🚀 Uruchamianie aplikacji
 
