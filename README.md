@@ -27,9 +27,10 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Python 3.x
 - BeautifulSoup
 - asyncio, multiprocessing
-- Flask / Django
-- MongoDB
-- Docker, Docker Compose
+- Flask
+- Redis
+- Docker
+- Kubernetes
 
 ## 🚀 Uruchamianie aplikacji
 
