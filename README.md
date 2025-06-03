@@ -39,7 +39,6 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Redis
 - Docker
 - Kuberneter
-## 📝 Podsumowanie
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
@@ -49,3 +48,5 @@ cd nazwa-repo
 
 # 2. Uruchomienie kontenerów (Docker Compose)
 docker-compose up --build
+```
+## 📝 Podsumowanie
