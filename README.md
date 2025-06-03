@@ -1,5 +1,5 @@
 # 🕸️ Projekt semestralny - Web Scraping
-##💻 Autorzy
+## 💻Autorzy
 - Kacper Woszczyło - 21324
 - Michał Lepak - 21255
 - Grupa: 1
