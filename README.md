@@ -1,4 +1,4 @@
-# 🕸️ Projekt semestralny
+# 🕸️ Projekt semestralny - Web Scraping
 
 ## 📌 Opis projektu
 
