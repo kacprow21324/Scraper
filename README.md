@@ -31,6 +31,8 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Redis
 - Docker
 - Kubernetes
+
+
 ##📝 Podsumowanie
 
 
