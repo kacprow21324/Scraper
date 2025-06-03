@@ -4,23 +4,13 @@
 
 Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekcjonowania i przechowywania danych** z witryn internetowych, zgodnie z uprzednio zdefiniowanym **profilem danych**. Celem projektu jest stworzenie skalowalnego i modularnego narzędzia do web scrapingu, które może funkcjonować w środowisku wieloprocesorowym i rozproszonym.
 
-> 🧠 **Ciekawostka od prof. Czyżaka:** Pierwszy znany system zbierający dane z internetu nazywał się „WebCrawler” i powstał w 1994 roku. Dziś każdy z nas może mieć własnego „crawlera” – a jakże, w Pythonie!
-
 ## 📋 Zakres funkcjonalności
 
-- ✅ Automatyczne zbieranie danych z internetu na podstawie zadanego profilu
-- ✅ Obsługa minimum **4 grup danych**, np.:
-  - Adresy email
-  - Adresy korespondencyjne
-  - Nazwy i struktury organizacyjne
-  - Numery telefonów / linki / social media
-- ✅ Wieloprocesowe przetwarzanie danych z wykorzystaniem:
-  - `multiprocessing` (dystrybucja na rdzenie CPU)
-  - `asyncio` (asynchroniczna obsługa I/O)
-- ✅ Parsowanie treści przy pomocy `BeautifulSoup`
-- ✅ Zapis danych w bazie danych **MongoDB**
-- ✅ Interfejs graficzny (webowy) zrealizowany przy użyciu:
-  - `Flask` **lub** `Django`
+- ✅ Tytuł
+- ✅ Kategoria
+- ✅ Cena
+- ✅ Ilość
+ 
 
 ## 🧱 Architektura systemu
 
