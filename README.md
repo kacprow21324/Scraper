@@ -28,7 +28,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 |-------------------------------------------------------------|-----------------------------------------------------------|
 | 🧠 Silnik              | Komponent odpowiedzialny za scraping, analizę i przetwarzanie danych; uruchamiany w kontenerze z Pythonem i multiprocessing |
 | 🌐 Interfejs           | Serwer aplikacji webowej – obsługuje interakcję z użytkownikiem, prezentuje dane i uruchamia zadania scrapujące |
-| 🗄️ Baza Danych (Redis)ㅤㅤㅤㅤㅤㅤ| In-memory store – przechowuje dane w strukturach klucz-wartość; może pełnić rolę bufora, kolejki zadań, cache’u lub tymczasowego magazynu wyników  |
+| 🗄️ Baza Danych (Redis)ㅤㅤㅤ| In-memory store – przechowuje dane w strukturach klucz-wartość; może pełnić rolę bufora, kolejki zadań, cache’u lub tymczasowego magazynu wyników  |
 
 ## 🧪 Technologie
 
