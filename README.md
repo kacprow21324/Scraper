@@ -34,8 +34,6 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 
 
 ##📝 Podsumowanie
-
-
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
