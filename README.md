@@ -31,8 +31,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Redis
 - Docker
 - Kuberneter
-  
-##📝 Podsumowanie
+## 📝 Podsumowanie
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
