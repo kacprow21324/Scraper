@@ -17,15 +17,10 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 Projekt zakłada **modularną, kontenerową architekturę**, która składa się z minimum **3 kontenerów**:
 
 | Moduł                    | Opis                                                    |
-|--------------------------|-----------------------------------------------------------|
+|-------------------------------------------------------------|-----------------------------------------------------------|
 | 🧠 Silnik              | Komponent odpowiedzialny za scraping, analizę i przetwarzanie danych; uruchamiany w kontenerze z Pythonem i multiprocessing |
 | 🌐 Interfejs           | Serwer aplikacji webowej – obsługuje interakcję z użytkownikiem, prezentuje dane i uruchamia zadania scrapujące |
-| 🗄️ Baza Danych         | Redis |
-
-> 🔧 Skalowalność:
-> - poziom 1: rozbicie procesu na wiele CPU
-> - poziom 2: uruchamianie silników scrapujących na wielu maszynach
-> - poziom 3: możliwa integracja z klastrami obliczeniowymi (np. z użyciem Celery + Redis)
+| 🗄️ Baza Danych         | Redis                                                       |
 
 ## 🧪 Technologie
 
