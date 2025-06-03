@@ -16,7 +16,7 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 Projekt zakłada **modularną, kontenerową architekturę**, która składa się z minimum **3 kontenerów**:
 
-| Moduł             | Opis                                                           |
+| Moduł                    | Opis                                                    |
 |--------------------------|-----------------------------------------------------------|
 | 🧠 Silnik              | Komponent odpowiedzialny za scraping, analizę i przetwarzanie danych; uruchamiany w kontenerze z Pythonem i multiprocessing |
 | 🌐 Interfejs           | Serwer aplikacji webowej – obsługuje interakcję z użytkownikiem, prezentuje dane i uruchamia zadania scrapujące |
