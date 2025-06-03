@@ -1,7 +1,8 @@
 # 🕸️ Projekt semestralny - Web Scraping
-## Autorzy:
-- Kacper Woszczyło 21324
-- Michał Lepak 21255
+## Autorzy
+- Kacper Woszczyło - 21324
+- Michał Lepak - 21255
+- Grupa: 1
 ## 📄 Cel projektu
 1. Aplikacja pobiera, selekcjonuje i składuje  wybranedane o narzuconym profilu z witryn internetowych.
 2. Profil danych jest ustalony przez realizującego projekt. Profil danych powinien obejmować min. 4 grupy, np. adresy email, adresy korespondencyjne, schemat organizacyjny itp.
