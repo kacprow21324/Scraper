@@ -1,4 +1,4 @@
-# 🕸️ Distributed Web Data Harvester
+# 🕸️ Projekt semestralny
 
 ## 📌 Opis projektu
 
