@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8">
+  <title>Książki</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <header>Scraper</header>
+<main>
+<form method="post" class="filters scrape-form">
+  <label>Dodaj książki z linku:</label>
+  <input type="text" name="scrape_url" placeholder="https://example.com/ksiazki">
+  <br>
+  <button type="submit">Scrapuj</button>
+</form>
+  <form method="get" class="filters sort-filter-form" id="sortForm">
+    <label>Sortuj wg:</label>
+    <select name="sort">
+      <option value="">-- wybierz --</option>
+      <option value="name-asc">Nazwa A-Z</option>
+      <option value="name-desc">Nazwa Z-A</option>
+      <option value="price-asc">Cena rosnąco</option>
+      <option value="price-desc">Cena malejąco</option>
+      <option value="amount-asc">Ilość rosnąco</option>
+      <option value="amount-desc">Ilość malejąco</option>
+    </select>
+
+    <label>Kategoria:</label>
+    <input type="text" name="category" placeholder="np. survivalowa">
+
+    <button type="submit">Filtruj</button>
+  </form>
+
+  <div class="book-grid">
+    {% for book in books %}
+    <div class="book">
+      <div class="title">{{ book.title }}</div>
+      <div class="category">Kategoria: {{ book.category }}</div>
+      <div class="amount">Ilość: {{ book.amount }}</div>
+      <div class="price">Cena: {{ "%.2f"|format(book.price) }} zł</div>
+    </div>
+    {% endfor %}
+  </div>
+</main>
+
+
+  <footer>
+    Autorzy: Kacper Woszczyło 21324 oraz Michał Lepak 21255
+  </footer>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sortSelect = document.querySelector('select[name="sort"]');
+    sortSelect.addEventListener('change', function () {
+      document.getElementById('sortForm').submit();
+    });
+  });
+</script>
+</body>
+</html>

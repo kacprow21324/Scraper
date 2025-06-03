@@ -1,0 +1,166 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body, html {
+  height: 100%;
+  font-family: 'Segoe UI', sans-serif;
+  background: #f4f6f9;
+  display: flex;
+  flex-direction: column;
+}
+
+header {
+  background-color: #2c3e50;
+  color: #ecf0f1;
+  padding: 25px;
+  font-size: 2.2rem;
+  font-weight: bold;
+  text-align: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+main {
+  flex: 1;
+  padding: 30px;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+  margin-bottom: 25px;
+  align-items: center;
+}
+
+.filters label {
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.filters input, .filters select {
+  padding: 6px 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 200px;
+}
+
+.filters button {
+  padding: 7px 14px;
+  background-color: #3498db;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.filters button:hover {
+  background-color: #2980b9;
+
+}
+
+.book-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}
+
+.book {
+  background-color: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+.book:hover {
+  transform: translateY(-5px);
+}
+
+.title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #34495e;
+}
+
+.category, .amount, .price {
+  margin-top: 10px;
+  color: #555;
+}
+
+.price {
+  color: #27ae60;
+  font-weight: bold;
+}
+
+footer {
+  background-color: #2c3e50;
+  color: white;
+  text-align: center;
+  padding: 20px;
+  font-size: 1rem;
+  margin-top: auto;
+}
+.scrape-form {
+  background-color: #e3f2fd;
+  padding: 20px 30px;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  margin: 0 auto 30px auto;
+  border-left: 5px solid #2196f3;
+  max-width: 600px;
+  text-align: center;
+}
+.scrape-form label {
+  font-size: 1.3rem;
+  font-weight: bold;
+  color: #1565c0;
+  display: block;
+  margin-bottom: 10px;
+}
+.scrape-form input {
+  width: 80%;
+  padding: 10px;
+  font-size: 1rem;
+  margin-bottom: 15px;
+  border-radius: 5px;
+  border: 1px solid #90caf9;
+}
+.scrape-form button {
+  padding: 10px 20px;
+  font-size: 1rem;
+  background-color: #1976d2;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.scrape-form button:hover {
+  background-color: #1565c0;
+}
+.filters select {
+  min-width: 200px;
+}
+.sort-filter-form {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 15px;
+  margin-bottom: 30px;
+  text-align: center;
+}
+.sort-filter-form label {
+  font-weight: bold;
+  font-size: 1.1rem;
+  color: #2c3e50;
+}
+.sort-filter-form input,
+.sort-filter-form select {
+  padding: 8px 12px;
+  font-size: 1rem;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+}
