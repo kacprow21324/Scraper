@@ -20,7 +20,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 |------------------|----------------------------------------------------------------|
 | 🧠 Silnik         | Komponent odpowiedzialny za scraping, analizę i przetwarzanie danych; uruchamiany w kontenerze z Pythonem i multiprocessing |
 | 🌐 Interfejs      | Serwer aplikacji webowej – obsługuje interakcję z użytkownikiem, prezentuje dane i uruchamia zadania scrapujące |
-| 🗄️ Baza Danych    | MongoDB w osobnym kontenerze – przechowuje dane w elastycznym formacie dokumentowym (JSON-like) |
+| 🗄️ Baza Danych    | Redis |
 
 > 🔧 Skalowalność:
 > - poziom 1: rozbicie procesu na wiele CPU
