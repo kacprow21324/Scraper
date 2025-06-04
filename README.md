@@ -74,7 +74,7 @@ kubectl get svc
 kubectl exec deployment/redis -- redis-cli FLUSHALL
 
 # 8. Wejść na interfejs w przeglądarce:
-#    http://localhost:30000
+    http://localhost:30000
 
 # 9. Podać dowolny URL (np. "https://books.toscrape.com/") i kliknąć "Scrapuj".
 
