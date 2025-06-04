@@ -18,10 +18,12 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 ## 📋 Zakres funkcjonalności
 
-- ✅ Tytuł
-- ✅ Kategoria
-- ✅ Cena
-- ✅ Ilość
+- ✅ Scrapowanie danej strony, według potrzeb
+- ✅ Sortowanie według potrzeb użytkownika (Nazwa A-Z, Nazwa Z-A, Cena rosnąco, Cena malejąco, Ilość rosnąco, Ilość malejąco)
+- ✅ Przeglądanie ponad 1000 książek
+- ✅ Wybór kategoria, według uznań
+
+  
  
 
 ## 🧱 Architektura systemu
