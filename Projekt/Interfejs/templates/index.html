@@ -7,6 +7,7 @@
 </head>
 <body>
   <header>Scraper</header>
+
 <main>
   <form method="post" class="filters scrape-form">
     <label>Dodaj książki z linku:</label>
@@ -29,7 +30,6 @@
 
     <label>Kategoria:</label>
     <input type="text" name="category" placeholder="np. survivalowa">
-
     <button type="submit">Filtruj</button>
   </form>
 
@@ -45,6 +45,12 @@
       <div class="category">Kategoria: {{ book.category }}</div>
       <div class="amount">Ilość: {{ book.amount }}</div>
       <div class="price">Cena: {{ "%.2f"|format(book.price) }} zł</div>
+
+      <!-- FORMULARZ USUWANIA -->
+      <form method="post" action="{{ url_for('delete_book') }}" onsubmit="return confirm('Czy na pewno chcesz usunąć tę książkę?');">
+        <input type="hidden" name="key" value="{{ book.redis_key }}">
+        <button type="submit" class="delete-button">Usuń</button>
+      </form>
     </div>
     {% endfor %}
   </div>
@@ -53,6 +59,7 @@
   <footer>
     Autorzy: Kacper Woszczyło 21324 oraz Michał Lepak 21255
   </footer>
+
   <script>
     document.addEventListener("DOMContentLoaded", function () {
       const sortSelect = document.querySelector('select[name="sort"]');
