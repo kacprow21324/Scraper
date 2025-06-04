@@ -8,12 +8,13 @@
 <body>
   <header>Scraper</header>
 <main>
-<form method="post" class="filters scrape-form">
-  <label>Dodaj książki z linku:</label>
-  <input type="text" name="scrape_url" placeholder="https://example.com/ksiazki">
-  <br>
-  <button type="submit">Scrapuj</button>
-</form>
+  <form method="post" class="filters scrape-form">
+    <label>Dodaj książki z linku:</label>
+    <input type="text" name="scrape_url" placeholder="https://books.toscrape.com/">
+    <br>
+    <button type="submit">Scrapuj</button>
+  </form>
+
   <form method="get" class="filters sort-filter-form" id="sortForm">
     <label>Sortuj wg:</label>
     <select name="sort">
@@ -35,6 +36,11 @@
   <div class="book-grid">
     {% for book in books %}
     <div class="book">
+      {% if book.image_url %}
+      <div class="book-image">
+        <img src="{{ book.image_url }}" alt="{{ book.title }}">
+      </div>
+      {% endif %}
       <div class="title">{{ book.title }}</div>
       <div class="category">Kategoria: {{ book.category }}</div>
       <div class="amount">Ilość: {{ book.amount }}</div>
@@ -44,17 +50,16 @@
   </div>
 </main>
 
-
   <footer>
     Autorzy: Kacper Woszczyło 21324 oraz Michał Lepak 21255
   </footer>
   <script>
-  document.addEventListener("DOMContentLoaded", function () {
-    const sortSelect = document.querySelector('select[name="sort"]');
-    sortSelect.addEventListener('change', function () {
-      document.getElementById('sortForm').submit();
+    document.addEventListener("DOMContentLoaded", function () {
+      const sortSelect = document.querySelector('select[name="sort"]');
+      sortSelect.addEventListener('change', function () {
+        document.getElementById('sortForm').submit();
+      });
     });
-  });
-</script>
+  </script>
 </body>
 </html>

@@ -1,41 +1,77 @@
 from flask import Flask, render_template, request, redirect, url_for
+import os
+import json
+import redis
 
 app = Flask(__name__)
 
-books = [
-    {"title": "Survival 101", "category": "survivalowa", "price": 49.99, "amount": 10},
-    {"title": "Kuchnia Polska", "category": "gotowanie", "price": 39.99, "amount": 5},
-    {"title": "Góry i Wspinaczka", "category": "survivalowa", "price": 59.99, "amount": 2},
-    {"title": "JavaScript dla Początkujących", "category": "informatyka", "price": 79.99, "amount": 7},
-]
+# ==================== KONFIGURACJA REDISA ====================
+REDIS_HOST = os.getenv("REDIS_HOST", "redis-service")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_DB   = int(os.getenv("REDIS_DB", 0))
+redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'POST':
         url = request.form.get('scrape_url')
-        print(f"Link do scrapowania: {url}")
-        # Tu dodaj logikę scrapowania po URL
+        if url:
+            # dodaj URL do kolejki scraper queue
+            redis_client.rpush("scrape_queue", url)
         return redirect(url_for('index'))
 
-    sort = request.args.get('sort')
-    category_filter = request.args.get('category', '').lower()
+    # Pobieramy wszystkie klucze 'book:*' z Redis, kolejno według 'books_list'
+    all_keys = redis_client.lrange("books_list", 0, -1)
+    books = []
+    for raw_key in all_keys:
+        key = raw_key.decode("utf-8")
+        raw_data = redis_client.get(key)
+        if not raw_data:
+            continue
+        entry = json.loads(raw_data)
+        # entry zawiera: title, price, availability, category, image_url
+        title = entry.get("title", "brak")
+        price = float(entry.get("price", "0"))
+        availability = entry.get("availability", "")
+        # Parsujemy ilość z początkowego pola availability:
+        amount = 0
+        if "(" in availability and ")" in availability:
+            try:
+                inside = availability.split("(")[1].split(")")[0]  # np. "22 available"
+                amount = int(inside.split()[0])
+            except:
+                amount = 0
+        category = entry.get("category", "nieznana")
+        # Pobieramy teraz image_url:
+        image_url = entry.get("image_url", "")
 
-    filtered_books = [book for book in books if category_filter in book['category'].lower()]
+        books.append({
+            "title": title,
+            "category": category,
+            "price": price,
+            "amount": amount,
+            "image_url": image_url
+        })
 
-    if sort == 'name-asc':
-        filtered_books.sort(key=lambda x: x['title'])
-    elif sort == 'name-desc':
-        filtered_books.sort(key=lambda x: x['title'], reverse=True)
-    elif sort == 'price-asc':
-        filtered_books.sort(key=lambda x: x['price'])
-    elif sort == 'price-desc':
-        filtered_books.sort(key=lambda x: x['price'], reverse=True)
-    elif sort == 'amount-asc':
-        filtered_books.sort(key=lambda x: x['amount'])
-    elif sort == 'amount-desc':
-        filtered_books.sort(key=lambda x: x['amount'], reverse=True)
+    # SORTOWANIE I FILTROWANIE:
+    sort = request.args.get("sort")
+    category_filter = request.args.get("category", "").lower()
+    filtered = [b for b in books if category_filter in b["category"].lower()]
 
-    return render_template('index.html', books=filtered_books)
+    if sort == "name-asc":
+        filtered.sort(key=lambda x: x["title"])
+    elif sort == "name-desc":
+        filtered.sort(key=lambda x: x["title"], reverse=True)
+    elif sort == "price-asc":
+        filtered.sort(key=lambda x: x["price"])
+    elif sort == "price-desc":
+        filtered.sort(key=lambda x: x["price"], reverse=True)
+    elif sort == "amount-asc":
+        filtered.sort(key=lambda x: x["amount"])
+    elif sort == "amount-desc":
+        filtered.sort(key=lambda x: x["amount"], reverse=True)
+
+    return render_template("index.html", books=filtered)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=5000, debug=True)

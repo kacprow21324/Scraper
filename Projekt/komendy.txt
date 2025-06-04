@@ -1,0 +1,36 @@
+# 1. Włącz Kubernetes w Docker Desktop (GUI).
+
+# 2. Zbuduj obraz Redis:
+cd DB
+docker build -t projekt-redis:latest .
+
+# 3. Zbuduj obraz Silnik (po wprowadzeniu poprawek scraper_master):
+cd ../Silnik
+docker build -t projekt-silnik:latest .
+
+# 4. Zbuduj obraz Interfejs (po wprowadzeniu poprawek app.py, index.html itp.):
+cd ../Interfejs
+docker build -t projekt-interfejs:latest .
+
+# 5. Wdróż manifesty w Kubernetes:
+cd ../k8s
+kubectl apply -f bd-deployment.yaml
+kubectl apply -f engine-deployment.yaml
+kubectl apply -f interface-deployment.yaml
+
+# 6. Sprawdź, czy pody działają:
+kubectl get pods
+kubectl get svc
+
+# (opcjonalnie) 7. Jeżeli chcesz wyczyścić Redis przed nowym scrapowaniem:
+kubectl exec deployment/redis -- redis-cli FLUSHALL
+
+# 8. Wejdź na interfejs w przeglądarce:
+#    http://localhost:30000
+
+# 9. Podaj dowolny URL (np. "https://books.toscrape.com/") i kliknij "Scrapuj".
+
+# 10. Śledź logi silnika, aby zobaczyć postęp:
+kubectl logs -f deployment/scraper-engine
+
+# 11. Po zakończeniu scrappingu odśwież stronę w przeglądarce i zobacz wyniki.

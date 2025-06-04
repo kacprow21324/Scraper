@@ -1,58 +1,82 @@
+#!/usr/bin/env python3
 import os
-import json
-import argparse
+import multiprocessing
+import time
 import redis
-from multiprocessing import Pool, cpu_count
-from scraper_worker import get_all_pages, scrape_page_books
+from scraper_worker import generate_all_page_urls, scrape_pages_chunk
 
-# ================= KONFIGURACJA REDISA =================
-REDIS_HOST = os.getenv('REDIS_HOST', 'localhost')
-REDIS_PORT = int(os.getenv('REDIS_PORT', 6379))
-REDIS_DB   = int(os.getenv('REDIS_DB', 0))
-
+# ==================== KONFIGURACJA REDISA ====================
+REDIS_HOST = os.getenv("REDIS_HOST", "redis-service")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_DB   = int(os.getenv("REDIS_DB", 0))
 redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
-# ================= ZAPIS DO REDISA ====================
-def save_to_redis(book_data):
+def chunkify(lst: list, n: int) -> list[list]:
     """
-    book_data to słownik:
-    {
-      'title': "...",
-      'price': "£51.77",
-      'availability': 3,
-      'category': "Science Fiction",
-      'image_url': "https://..."
-    }
-    Zapisujemy każdą książkę jako JSON pod kluczem np. "book:<unikalne_id>".
+    Dzieli listę lst na n niemal równolicznych kawałków.
+    Zwraca listę n list.
     """
-    book_id = redis_client.incr("book_id_counter")
-    key = f"book:{book_id}"
-    redis_client.set(key, json.dumps(book_data, ensure_ascii=False))
-    redis_client.rpush("books_list", key)
+    if not lst:
+        return []
+    k, m = divmod(len(lst), n)
+    return [
+        lst[i * k + min(i, m):(i + 1) * k + min(i + 1, m)]
+        for i in range(n)
+    ]
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Master scraper: dzieli pracę pomiędzy procesy.")
-    parser.add_argument("--base-url", type=str, default="https://books.toscrape.com/catalogue/",
-                        help="Podstawowy URL strony, np. https://books.toscrape.com/catalogue/")
-    parser.add_argument("--pages", nargs="*", help="Lista manualna stron do scrapingu (jeśli podano, używamy tych zamiast generowania automatycznego)")
-    args = parser.parse_args()
+    """
+    Główny silnik scrapera:
+    1. Łączy się do Redisa i w nieskończonej pętli wywołuje BLPOP na 'scrape_queue'.
+    2. Gdy otrzyma URL (np. 'https://books.toscrape.com/catalogue/page-1.html'),
+       generuje listę wszystkich stron listingowych (paginacji).
+    3. Dzieli tę listę na kawałki wg liczby CPU.
+    4. Uruchamia multiprocessing.Pool(...).map(scrape_pages_chunk, chunks), co
+       w każdym procesie odpala asynchroniczne pobieranie stron i zapis do Redisa.
+    5. Po skończeniu przechodzi od razu do następnego BLPOP i czeka na kolejny URL.
+    """
+    print("[Scraper Master] Startujemy. Oczekuję na URL-e w kolejce 'scrape_queue'...")
 
-    # Jeśli użytkownik podał listę stron, używamy jej. W przeciwnym wypadku generujemy pełny katalog.
-    if args.pages:
-        all_pages = args.pages
-    else:
-        all_pages = get_all_pages(args.base_url)
+    while True:
+        # BLPOP: czeka w nieskończoność, aż ktoś wrzuci URL do listy 'scrape_queue'
+        item = redis_client.blpop("scrape_queue", timeout=0)
+        if not item:
+            # (teoretycznie nie nastąpi, bo timeout=0 → czeka do skutku)
+            continue
 
-    # Uruchamiamy pulę procesów równoległych
-    with Pool(cpu_count()) as pool:
-        # mapujemy funkcję scrape_page_books (zwraca listę książek dla każdej strony) na wszystkie strony
-        results = pool.map(scrape_page_books, all_pages)
+        _, url_to_scrape = item
+        url_to_scrape = url_to_scrape.decode("utf-8").strip()
+        if not url_to_scrape:
+            # pusta linia? pomijamy
+            continue
 
-    # Spłaszczamy listę: każda strona -> lista książek
-    all_books = [book for page_books in results for book in page_books]
+        print(f"[Scraper Master] Otrzymałem URL do scrapowania: {url_to_scrape}")
 
-    # Zapis do Redisa
-    for book in all_books:
-        save_to_redis(book)
+        # 1. Wygeneruj listę wszystkich stron listingowych (paginacja)
+        all_page_urls = generate_all_page_urls(url_to_scrape)
+        num_pages = len(all_page_urls)
+        print(f"[Scraper Master] Znaleziono {num_pages} stron listingowych do zeskrobania.")
 
-    print(f"Całkowicie pobrano i zapisano do Redisa: {len(all_books)} książek.")
+        if num_pages == 0:
+            print(f"[Scraper Master] Brak stron do zeskrobania lub błąd pobrania: {url_to_scrape}")
+            # od razu powrót do BLPOP
+            continue
+
+        # 2. Oblicz liczbę procesów = liczba rdzeni CPU (możesz to zmienić)
+        n_procs = multiprocessing.cpu_count()
+        print(f"[Scraper Master] Użyję {n_procs} procesów do przetworzenia {num_pages} stron.")
+
+        # 3. Podziel listę URL-i na n_proc kawałków
+        chunks = chunkify(all_page_urls, n_procs)
+
+        if not chunks:
+            # pusta lista → nic do roboty, powrót do nasłuchiwania
+            continue
+
+        # 4. Uruchom pool procesów, każdy wywoła scrape_pages_chunk(...) na swoim fragmencie
+        with multiprocessing.Pool(processes=n_procs) as pool:
+            pool.map(scrape_pages_chunk, chunks)
+
+        print(f"[Scraper Master] Scraping dla {url_to_scrape} zakończony.\n")
+        # Pętla wraca do BLPOP – oczekujemy na kolejne URL-e
+        time.sleep(1)  # krótka pauza przed następnym cyklem (opcjonalnie)

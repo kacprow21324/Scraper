@@ -1,0 +1,32 @@
+# k8s/engine-deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: scraper-engine
+  labels:
+    app: scraper-engine
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: scraper-engine
+  template:
+    metadata:
+      labels:
+        app: scraper-engine
+    spec:
+      containers:
+        - name: scraper-engine
+          image: projekt-silnik:latest
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: REDIS_HOST
+              value: "redis-service"
+            - name: REDIS_PORT
+              value: "6379"
+            - name: REDIS_DB
+              value: "0"
+            - name: BASE_URL
+              value: "https://books.toscrape.com/catalogue/page-1.html"
+          # Nie wystawiamy portów, bo silnik nie ma serwera HTTP
+---

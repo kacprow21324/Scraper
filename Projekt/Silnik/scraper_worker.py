@@ -1,111 +1,128 @@
-# scraper_worker.py
-
 #!/usr/bin/env python3
-import re
-import requests
+import os
+import json
 import asyncio
 import aiohttp
+import redis
 from bs4 import BeautifulSoup
+from urllib.parse import urljoin
 
-# ================= SCRAPING FUNKCJE ====================
+# ==================== KONFIGURACJA REDISA ====================
+REDIS_HOST = os.getenv("REDIS_HOST", "redis-service")
+REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
+REDIS_DB   = int(os.getenv("REDIS_DB", 0))
+redis_client = redis.Redis(host=REDIS_HOST, port=REDIS_PORT, db=REDIS_DB)
 
-def get_books_links(page_url, base_url=None):
-    """
-    Pobiera wszystkie linki do książek znajdujące się na stronie katalogu.
-    - page_url: pełny URL strony np. https://books.toscrape.com/catalogue/page-1.html
-    - base_url: podstawowy URL dla łączenia (np. https://books.toscrape.com/catalogue/)
-      Jeśli nie podano, próbuje wywnioskować z page_url.
-    Zwraca listę pełnych URLi do podstron z pojedynczymi książkami.
-    """
-    resp = requests.get(page_url)
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    links = []
-    # jeśli base_url nie podano, wyciągamy z page_url
-    if not base_url:
-        # np. https://books.toscrape.com/catalogue/page-1.html -> https://books.toscrape.com/catalogue/
-        parts = page_url.split('/')[:-1]
-        base_url = '/'.join(parts) + '/'
+# ==================== FUNKCJE ASYNC DO POBIERANIA ====================
+async def fetch(session: aiohttp.ClientSession, url: str) -> str:
+    try:
+        async with session.get(url, timeout=30) as response:
+            if response.status == 200:
+                return await response.text()
+            else:
+                return ""
+    except Exception:
+        return ""
 
-    for a in soup.select('h3 a'):
-        href = a['href'].replace('../../../', '')
-        links.append(f"{base_url}{href}")
-    return links
+def parse_listing_page(html: str, base_url: str) -> list[str]:
+    detail_urls = []
+    if not html:
+        return detail_urls
+    soup = BeautifulSoup(html, "html.parser")
+    pods = soup.select("article.product_pod h3 a")
+    for a in pods:
+        rel = a.get("href", "")
+        full = urljoin(base_url, rel)
+        detail_urls.append(full)
+    return detail_urls
 
-async def fetch(session, url):
-    async with session.get(url) as response:
-        return await response.text()
+def parse_detail_page(html: str, detail_url: str) -> dict:
+    if not html:
+        return {}
+    soup = BeautifulSoup(html, "html.parser")
 
-async def scrape_book(session, url):
-    html = await fetch(session, url)
-    soup = BeautifulSoup(html, 'html.parser')
+    title_tag = soup.select_one("div.product_main h1")
+    title = title_tag.text.strip() if title_tag else "brak tytułu"
 
-    title = soup.select_one('h1').text
-    price = soup.select_one('.price_color').text
+    price_tag = soup.select_one("p.price_color")
+    price = price_tag.text.strip().lstrip("£") if price_tag else "0"
 
-    raw_availability = soup.select_one('.instock.availability').text.strip()
-    match = re.search(r'(\d+)', raw_availability)
-    if match:
-        availability = int(match.group(1))
+    avail_tag = soup.select_one("p.availability")
+    availability = avail_tag.text.strip() if avail_tag else "Unavailable"
+
+    category = "nieznana"
+    bread = soup.select("ul.breadcrumb li a")
+    if len(bread) >= 3:
+        category = bread[2].text.strip()
+
+    img_tag = soup.select_one("div.carousel-inner img")
+    if img_tag and img_tag.get("src"):
+        image_url = urljoin(detail_url, img_tag["src"])
     else:
-        availability = 0
-
-    category = soup.select('ul.breadcrumb li')[2].text.strip()
-    img_relative_url = soup.select_one('.item.active img')['src']
-    # Budujemy pełny URL obrazka z książki:
-    if img_relative_url.startswith('http'):
-        image_url = img_relative_url
-    else:
-        # Zakładamy, że podajemy zawsze base_url zawierający katalog główny, np. https://books.toscrape.com/catalogue/
-        base = '/'.join(url.split('/')[:-3]) + '/'
-        image_url = base + img_relative_url.replace('../../', '')
+        image_url = ""
 
     return {
-        'title': title,
-        'price': price,
-        'availability': availability,
-        'category': category,
-        'image_url': image_url
+        "title": title,
+        "price": price,
+        "availability": availability,
+        "category": category,
+        "image_url": image_url
     }
 
-async def scrape_page(session, page_url, base_url=None):
-    """
-    Pobiera wszystkie linki książek z danej strony, a następnie asynchronicznie scrapuje każdą książkę.
-    Zwraca listę słowników z danymi książek.
-    """
-    links = get_books_links(page_url, base_url)
-    tasks = [scrape_book(session, url) for url in links]
-    books = await asyncio.gather(*tasks)
-    return books
+def save_to_redis(book_data: dict):
+    if not book_data or "title" not in book_data:
+        return
+    key = f"book:{book_data['title']}"
+    redis_client.set(key, json.dumps(book_data))
+    redis_client.lpush("books_list", key)
 
-def scrape_page_books(page_url):
-    """
-    Funkcja wykonywana przez multiprocessing.Pool.
-    Tworzy event loop asyncio, otwiera sesję i wywołuje scrape_page.
-    Zwraca listę książek (słowników).
-    """
-    loop = asyncio.new_event_loop()
-    asyncio.set_event_loop(loop)
-    async def wrapper():
-        async with aiohttp.ClientSession() as session:
-            return await scrape_page(session, page_url)
-    result = loop.run_until_complete(wrapper())
-    loop.close()
-    return result
+async def process_pages_async(page_urls: list[str]) -> None:
+    sem = asyncio.Semaphore(20)
 
-def get_all_pages(base_url):
-    """
-    Generuje listę wszystkich stron katalogu do scrapowania:
-    - base_url: np. "https://books.toscrape.com/catalogue/"
-    Zwraca listę URLi typu:
-      https://books.toscrape.com/catalogue/page-1.html,
-      https://books.toscrape.com/catalogue/page-2.html, ...
-    """
-    first_page = base_url.rstrip('/') + '/page-1.html'
-    resp = requests.get(first_page)
-    soup = BeautifulSoup(resp.text, 'html.parser')
-    total_text = soup.select_one('.current').text.strip()  # np. "Page 1 of 50"
-    total_pages = int(total_text.split()[-1])
-    pages = [first_page]
-    for i in range(2, total_pages + 1):
-        pages.append(base_url.rstrip('/') + f'/page-{i}.html')
-    return pages
+    async def bound_fetch(session: aiohttp.ClientSession, url: str) -> str:
+        async with sem:
+            return await fetch(session, url)
+
+    async with aiohttp.ClientSession() as session:
+        listing_tasks = [bound_fetch(session, url) for url in page_urls]
+        listing_htmls = await asyncio.gather(*listing_tasks)
+
+        detail_urls = []
+        for html, base_url in zip(listing_htmls, page_urls):
+            detail_urls.extend(parse_listing_page(html, base_url))
+
+        detail_tasks = [bound_fetch(session, url) for url in detail_urls]
+        detail_htmls = await asyncio.gather(*detail_tasks)
+
+        for html, detail_url in zip(detail_htmls, detail_urls):
+            data = parse_detail_page(html, detail_url)
+            save_to_redis(data)
+
+def scrape_pages_chunk(page_urls: list[str]) -> None:
+    try:
+        asyncio.run(process_pages_async(page_urls))
+    except Exception as e:
+        print(f"[Scraper Worker] Błąd w procesie przy chunk {page_urls[:1]}: {e}")
+
+def generate_all_page_urls(base_first_page: str) -> list[str]:
+    import requests
+    from bs4 import BeautifulSoup
+
+    urls = []
+    current = base_first_page
+    while current:
+        urls.append(current)
+        try:
+            resp = requests.get(current, timeout=20)
+        except Exception as e:
+            print(f"[Paginator] Błąd pobierania {current}: {e}")
+            break
+        if resp.status_code != 200:
+            break
+        soup = BeautifulSoup(resp.text, "html.parser")
+        next_btn = soup.select_one(".next a")
+        if next_btn and next_btn.get("href"):
+            current = urljoin(current, next_btn["href"])
+        else:
+            current = None
+    return urls

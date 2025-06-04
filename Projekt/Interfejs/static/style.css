@@ -1,3 +1,4 @@
+/* Interfejs/static/style.css */
 * {
   box-sizing: border-box;
   margin: 0;
@@ -58,7 +59,6 @@ main {
 
 .filters button:hover {
   background-color: #2980b9;
-
 }
 
 .book-grid {
@@ -103,6 +103,7 @@ footer {
   font-size: 1rem;
   margin-top: auto;
 }
+
 .scrape-form {
   background-color: #e3f2fd;
   padding: 20px 30px;
@@ -113,6 +114,7 @@ footer {
   max-width: 600px;
   text-align: center;
 }
+
 .scrape-form label {
   font-size: 1.3rem;
   font-weight: bold;
@@ -120,6 +122,7 @@ footer {
   display: block;
   margin-bottom: 10px;
 }
+
 .scrape-form input {
   width: 80%;
   padding: 10px;
@@ -128,6 +131,7 @@ footer {
   border-radius: 5px;
   border: 1px solid #90caf9;
 }
+
 .scrape-form button {
   padding: 10px 20px;
   font-size: 1rem;
@@ -137,12 +141,15 @@ footer {
   border-radius: 5px;
   cursor: pointer;
 }
+
 .scrape-form button:hover {
   background-color: #1565c0;
 }
+
 .filters select {
   min-width: 200px;
 }
+
 .sort-filter-form {
   display: flex;
   flex-wrap: wrap;
@@ -151,11 +158,13 @@ footer {
   margin-bottom: 30px;
   text-align: center;
 }
+
 .sort-filter-form label {
   font-weight: bold;
   font-size: 1.1rem;
   color: #2c3e50;
 }
+
 .sort-filter-form input,
 .sort-filter-form select {
   padding: 8px 12px;
@@ -163,4 +172,16 @@ footer {
   border-radius: 5px;
   border: 1px solid #ccc;
   min-width: 180px;
+}
+
+.book-image {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.book-image img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 5px;
 }
