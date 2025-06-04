@@ -41,10 +41,15 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Python 3.x
 - BeautifulSoup
 - asyncio, multiprocessing
-- Flask
+- scraper_worker (generate_all_page_urls, scrape_pages_chunk)
+- Flask (Flask, render_template, request, redirect, url_for)
 - Redis
 - Docker
 - Kuberneter
+- HTML && CSS
+- json
+- os
+- time
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
