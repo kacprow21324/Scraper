@@ -20,7 +20,7 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 - ✅ Scrapowanie stron, poprzez wpisanie linku
 - ✅ Sortowanie według potrzeb użytkownika (Nazwa A-Z, Nazwa Z-A, Cena rosnąco, Cena malejąco, Ilość rosnąco, Ilość malejąco)
-- ✅ Przeglądanie ponad 1000 książek
+- ✅ Przeglądanie ponad 1000-ca książek
 - ✅ Wybór kategorii według preferencji użytkownika
 
   
