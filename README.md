@@ -18,10 +18,12 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 ## 📋 Zakres funkcjonalności
 
-- ✅ Tytuł
-- ✅ Kategoria
-- ✅ Cena
-- ✅ Ilość
+- ✅ Scrapowanie stron, poprzez wpisanie linku
+- ✅ Sortowanie według potrzeb użytkownika (Nazwa A-Z, Nazwa Z-A, Cena rosnąco, Cena malejąco, Ilość rosnąco, Ilość malejąco)
+- ✅ Przeglądanie ponad 1000 książek
+- ✅ Wybór kategorii według preferencji użytkownika
+
+  
  
 
 ## 🧱 Architektura systemu
@@ -39,18 +41,54 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Python 3.x
 - BeautifulSoup
 - asyncio, multiprocessing
-- Flask
+- scraper_worker (generate_all_page_urls, scrape_pages_chunk)
+- Flask (Flask, render_template, request, redirect, url_for)
 - Redis
 - Docker
 - Kuberneter
+- HTML && CSS
+- json
+- os
+- time
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
-# 1. Klonowanie repozytorium
-git clone https://github.com/twoj-uzytkownik/nazwa-repo.git
-cd nazwa-repo
+# 1. Włączyć Kubernetes w Docker Desktop (GUI).
 
-# 2. Uruchomienie kontenerów (Docker Compose)
-docker-compose up --build
+# 2. Zbudować obraz Redis:
+cd Projekt/DB
+docker build -t projekt-redis:latest .
+
+# 3. Zbudować obraz Silnika:
+cd ../Silnik
+docker build -t projekt-silnik:latest .
+
+# 4. Zbudować obraz Interfejs:
+cd ../Interfejs
+docker build -t projekt-interfejs:latest .
+
+# 5. Wdróżyć manifesty w Kubernetes:
+cd ../k8s
+kubectl apply -f bd-deployment.yaml
+kubectl apply -f engine-deployment.yaml
+kubectl apply -f interface-deployment.yaml
+
+# 6. Sprawdzić, czy pody działają:
+kubectl get pods
+kubectl get svc
+
+# (opcjonalnie) 7. Jeżeli chcesz wyczyścić Redis przed nowym scrapowaniem:
+kubectl exec deployment/redis -- redis-cli FLUSHALL
+
+# 8. Wejść na interfejs w przeglądarce:
+http://localhost:30000
+
+# 9. Podać dowolny URLi kliknąć "Scrapuj".
+https://books.toscrape.com/
+
+# 10. Śledzić logi silnika, aby zobaczyć postęp:
+kubectl logs -f deployment/scraper-engine
+
+# 11. Po zakończeniu scrappingu odświeżyć stronę w przeglądarce i zobacz wyniki.
 ```
 ## 📝 Podsumowanie
