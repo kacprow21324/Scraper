@@ -1,11 +1,7 @@
-# k8s/bd-deployment.yaml
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: redis
-  labels:
-    app: redis
+  name: redis-deployment
 spec:
   replicas: 1
   selector:
@@ -18,17 +14,33 @@ spec:
     spec:
       containers:
         - name: redis
-          image: projekt-redis:latest
-          imagePullPolicy: IfNotPresent
+          image: redis:7-alpine
+          # Uruchamiamy Redis z naszą konfiguracją
+          command:
+            - "redis-server"
+            - "/usr/local/etc/redis/redis.conf"
           ports:
             - containerPort: 6379
           volumeMounts:
-            - name: redis-data
+            # Montujemy plik redis.conf z ConfigMap
+            - name: redis-config-volume
+              mountPath: /usr/local/etc/redis/redis.conf
+              subPath: redis.conf
+            # Montujemy PVC w /data, bo w redis.conf jest dir /data
+            - name: redis-data-volume
               mountPath: /data
       volumes:
-        - name: redis-data
-          emptyDir: {}  # na potrzeby developmentu; w produkcji zastąp PersistentVolumeClaim
+        - name: redis-config-volume
+          configMap:
+            name: redis-config
+            items:
+              - key: "redis.conf"
+                path: "redis.conf"
+        - name: redis-data-volume
+          persistentVolumeClaim:
+            claimName: redis-pvc
 ---
+# Opcjonalnie: Service do dostępu z zewnątrz/innych Podów:
 apiVersion: v1
 kind: Service
 metadata:
@@ -37,7 +49,6 @@ spec:
   selector:
     app: redis
   ports:
-    - protocol: TCP
-      port: 6379
+    - port: 6379
       targetPort: 6379
   type: ClusterIP

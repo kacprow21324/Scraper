@@ -14,6 +14,8 @@ docker build -t projekt-interfejs:latest .
 
 # 5. Wdróż manifesty w Kubernetes:
 cd ../k8s
+kubectl apply -f redis-configmap.yaml
+kubectl apply -f redis-pvc.yaml
 kubectl apply -f bd-deployment.yaml
 kubectl apply -f engine-deployment.yaml
 kubectl apply -f interface-deployment.yaml

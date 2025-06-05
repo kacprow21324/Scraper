@@ -5,7 +5,8 @@
   padding: 0;
 }
 
-body, html {
+body,
+html {
   height: 100%;
   font-family: 'Segoe UI', sans-serif;
   background: #88b6fb;
@@ -20,7 +21,7 @@ header {
   font-size: 2.2rem;
   font-weight: bold;
   text-align: center;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 main {
@@ -41,7 +42,8 @@ main {
   color: #2c3e50;
 }
 
-.filters input, .filters select {
+.filters input,
+.filters select {
   padding: 6px 10px;
   border-radius: 5px;
   border: 1px solid #ccc;
@@ -63,37 +65,94 @@ main {
 
 .book-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 20px;
+  align-items: stretch; /* Wszystkie karty w jednym wierszu mają tę samą wysokość */
 }
 
 .book {
   background-color: white;
   border-radius: 10px;
   padding: 20px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
   transition: transform 0.2s ease-in-out;
-}
 
+  display: flex;           /* Flex w pionie, aby przycisk wypełniał dół */
+  flex-direction: column;
+  height: 100%;            /* Rozciąga kartę na pełną wysokość pola gridu */
+}
 
 .book:hover {
   transform: translateY(-5px);
+}
+
+.book-image {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.book-image img {
+  max-width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: 5px;
 }
 
 .title {
   font-size: 1.2rem;
   font-weight: bold;
   color: #34495e;
+  text-align: center;      /* Wyrównanie tytułu na środek */
+  margin-bottom: 8px;
 }
 
-.category, .amount, .price {
-  margin-top: 10px;
+.category,
+.amount,
+.price {
   color: #555;
+  text-align: center;
+}
+
+.category {
+  margin-top: 4px;
+}
+
+.amount {
+  margin-top: 8px;
 }
 
 .price {
+  margin-top: 8px;
   color: #27ae60;
   font-weight: bold;
+}
+
+.book .delete-button {
+  /* Wypychamy przycisk na dół i wyśrodkowujemy poziomo */
+  margin-top: auto;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+  padding: 10px 20px;      /* Takie same wymiary jak przycisk „Scrapuj” */
+  font-size: 1rem;
+  background-color: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.book .delete-button:hover {
+  background-color: #c0392b;
+}
+
+@media (max-width: 480px) {
+  .book .delete-button,
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 footer {
@@ -109,7 +168,7 @@ footer {
   background-color: #e3f2fd;
   padding: 20px 30px;
   border-radius: 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
   margin: 0 auto 30px auto;
   border-left: 5px solid #2196f3;
   max-width: 600px;
@@ -173,16 +232,4 @@ footer {
   border-radius: 5px;
   border: 1px solid #ccc;
   min-width: 180px;
-}
-
-.book-image {
-  text-align: center;
-  margin-bottom: 10px;
-}
-
-.book-image img {
-  max-width: 100%;
-  max-height: 200px;
-  object-fit: contain;
-  border-radius: 5px;
 }
