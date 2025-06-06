@@ -32,40 +32,40 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 ```bash
 Repozytorium:
-│   LICENSE
-│   PRiR_21324_21255.docx
-│   README.md
+│───LICENSE
+│───PRiR_21324_21255.docx
+│───README.md
 │
 └───Projekt
-    │   komendy.txt
+    │───komendy.txt
     │
     ├───DB
-    │       Dockerfile
-    │       redis.conf
+    │    ├──Dockerfile
+    │    └──redis.conf
     │
     ├───Interfejs
-    │   │   app.py
-    │   │   Dockerfile
-    │   │   requirements.txt
+    │   │───app.py
+    │   │───Dockerfile
+    │   │───requirements.txt
     │   │
     │   ├───static
-    │   │       style.css
+    │   │    └───style.css
     │   │
     │   └───templates
-    │           index.html
+    │        └───index.html
     │
     ├───k8s
-    │       bd-deployment.yaml
-    │       engine-deployment.yaml
-    │       interface-deployment.yaml
-    │       redis-configmap.yaml
-    │       redis-pvc.yaml
+    │     ├───bd-deployment.yaml
+    │     ├───engine-deployment.yaml
+    │     ├───interface-deployment.yaml
+    │     ├───redis-configmap.yaml
+    │     └───redis-pvc.yaml
     │
     └───Silnik
-            Dockerfile
-            requirements.txt
-            scraper_master.py
-            scraper_worker.py
+           ├───Dockerfile
+           ├───requirements.txt
+           ├───scraper_master.py
+           └───scraper_worker.py
 
 ```
 ---
