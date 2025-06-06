@@ -4,7 +4,7 @@
 
 ## 👤Autorzy
 - Kacper Woszczyło - 21324
-- Michał Lepak - 21255
+- Michał Lepak - 21255 🌈
 - Grupa: 1
 
 ## 📄 Cel projektu
@@ -23,10 +23,29 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 
 ## 📋 Zakres funkcjonalności
 
-- ✅ Scrapowanie stron, poprzez wpisanie linku
-- ✅ Sortowanie według potrzeb użytkownika (Nazwa A-Z, Nazwa Z-A, Cena rosnąco, Cena malejąco, Ilość rosnąco, Ilość malejąco)
-- ✅ Przeglądanie ponad 1000 książek
-- ✅ Wybór kategorii według preferencji użytkownika
+➡️ **Scrapowanie stron poprzez podanie linku**  
+   - Użytkownik wkleja URL pierwszej strony (np. `https://books.toscrape.com/catalogue/page-1.html`),  
+   - Scraper Master automatycznie odkrywa kolejne strony paginacji,  
+   - Informacje szczegółowe (tytuł, cena, dostępność, kategoria, obrazek) są pobierane asynchronicznie i zapisywane w Redis.
+
+➡️ **Sortowanie według potrzeb użytkownika**  
+   - Dostępne tryby sortowania:  
+     - Nazwa rosnąco (A → Z)  
+     - Nazwa malejąco (Z → A)  
+     - Cena rosnąco  
+     - Cena malejąco  
+     - Ilość dostępna rosnąco  
+     - Ilość dostępna malejąco  
+   - Sortowanie odbywa się po stronie serwera (Flask), na już zebranym zbiorze rekordów.
+
+➡️ **Przeglądanie ponad 1000 książek (i więcej)**  
+   - System został zoptymalizowany pod kątem dużej liczby pozycji — Redis zapewnia szybki dostęp do danych,  
+   - Frontend wczytuje listę pozycji dynamicznie przy każdym odświeżeniu lub zmianie parametrów sortowania/filtrowania.
+
+➡️ **Wybór kategorii według preferencji użytkownika**  
+   - Na stronie WWW jest dostępne pole tekstowe (filtr kategorii),  
+   - Użytkownik może wpisać fragment nazwy kategorii (np. „travel”, „science”),  
+   - System wyświetli tylko te książki, których kategoria zawiera wpisaną frazę (ignorując wielkość liter).
 
 ## 📁 Struktura repozytorium
 
