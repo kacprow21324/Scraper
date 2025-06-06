@@ -1,8 +1,12 @@
 # 🕸️ Projekt semestralny - Web Scraping
+> ⚠️ **Uwaga: Scraper jest dostosowany do strony „Books to Scrape” (https://books.toscrape.com).**  
+> Scraping danych ze stron bez wyraźnej zgody właściciela jest nieetyczny i może naruszać regulamny serwisu lub prawa autorskie.  
+
 ## 👤Autorzy
 - Kacper Woszczyło - 21324
 - Michał Lepak - 21255
 - Grupa: 1
+
 ## 📄 Cel projektu
 1. Aplikacja pobiera, selekcjonuje i składuje  wybranedane o narzuconym profilu z witryn internetowych.
 2. Profil danych jest ustalony przez realizującego projekt. Profil danych powinien obejmować min. 4 grupy, np. adresy email, adresy korespondencyjne, schemat organizacyjny itp.
@@ -13,6 +17,7 @@
 7. Docelowo aplikacja ma być rozproszona na min 3 moduły: interfejs (1 lub więcej kontenerów), silnik (1 kontener), BD (1 kontener). Sposób ulokowania należy opracować we własnym zakresie i potrafić uzasadnić wybory.
 8. Oprogramowanie może być zrealizowane w grupie 1 lub 2 osobowej.
 9. Projekt uznaje się za złożony, jeżeli w wyznaczonym terminie zostanie opublikowany szczegółowy raport z dowiązaniem do repozytorium kodu (github) oraz zostanie zademonstrowany prowadzącemu na ostatnich zajęciach laboratoryjnych.
+
 ## 📌 Opis projektu
 Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekcjonowania i przechowywania danych** z witryn internetowych, zgodnie z uprzednio zdefiniowanym **profilem danych**. Celem projektu jest stworzenie skalowalnego i modularnego narzędzia do web scrapingu, które może funkcjonować w środowisku wieloprocesorowym i rozproszonym.
 
@@ -23,8 +28,47 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
 - ✅ Przeglądanie ponad 1000 książek
 - ✅ Wybór kategorii według preferencji użytkownika
 
-  
- 
+## 📁 Struktura repozytorium
+
+```bash
+Repozytorium:
+│   LICENSE
+│   PRiR_21324_21255.docx
+│   README.md
+│
+└───Projekt
+    │   komendy.txt
+    │
+    ├───DB
+    │       Dockerfile
+    │       redis.conf
+    │
+    ├───Interfejs
+    │   │   app.py
+    │   │   Dockerfile
+    │   │   requirements.txt
+    │   │
+    │   ├───static
+    │   │       style.css
+    │   │
+    │   └───templates
+    │           index.html
+    │
+    ├───k8s
+    │       bd-deployment.yaml
+    │       engine-deployment.yaml
+    │       interface-deployment.yaml
+    │       redis-configmap.yaml
+    │       redis-pvc.yaml
+    │
+    └───Silnik
+            Dockerfile
+            requirements.txt
+            scraper_master.py
+            scraper_worker.py
+
+```
+---
 
 ## 🧱 Architektura systemu
 
@@ -41,8 +85,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - Python 3.x
 - BeautifulSoup
 - asyncio, multiprocessing
-- scraper_worker (generate_all_page_urls, scrape_pages_chunk)
-- Flask (Flask, render_template, request, redirect, url_for)
+- Flask 
 - Redis
 - Docker
 - Kuberneter
@@ -50,6 +93,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - json
 - os
 - time
+
 ## 🚀 Uruchamianie aplikacji
 
 ```bash
@@ -69,6 +113,8 @@ docker build -t projekt-interfejs:latest .
 
 # 5. Wdróżyć manifesty w Kubernetes:
 cd ../k8s
+kubectl apply -f redis-configmap.yaml
+kubectl apply -f redis-pvc.yaml
 kubectl apply -f bd-deployment.yaml
 kubectl apply -f engine-deployment.yaml
 kubectl apply -f interface-deployment.yaml
@@ -92,3 +138,15 @@ kubectl logs -f deployment/scraper-engine
 # 11. Po zakończeniu scrappingu odświeżyć stronę w przeglądarce i zobacz wyniki.
 ```
 ## 📝 Podsumowanie
+
+---
+
+## 📬 Kontakt
+
+W razie pytań:
+- Email:   21324@student.ans-elblag.pl
+- GitHub:  https://github.com/kacprow21324
+
+---
+
+**Licencja:** [`MIT`](./LICENSE.md)   
