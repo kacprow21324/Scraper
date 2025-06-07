@@ -3,7 +3,7 @@
 > Scraping danych ze stron bez wyraźnej zgody właściciela jest nieetyczny i może naruszać regulamny serwisu lub prawa autorskie.  
 
 ## 👤Autorzy
-- Kacper Woszczyło - 21324
+- 🌈Kacper Woszczyło🌈 - 🌈21324🌈
 - Michał Lepak - 21255 🌈
 - Grupa: 1
 
