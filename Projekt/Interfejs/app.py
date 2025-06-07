@@ -19,6 +19,7 @@ def index():
             redis_client.rpush("scrape_queue", url)
         return redirect(url_for('index'))
 
+    # Pobieramy wszystkie książki
     all_keys = redis_client.lrange("books_list", 0, -1)
     books = []
     for raw_key in all_keys:
@@ -49,10 +50,19 @@ def index():
             "redis_key": key
         })
 
-    sort = request.args.get("sort")
+    # POBIERANIE PARAMETRÓW Z URLA
+    sort = request.args.get("sort", "")
     category_filter = request.args.get("category", "").lower()
-    filtered = [b for b in books if category_filter in b["category"].lower()]
+    search_query = request.args.get("search", "").lower()
 
+    # FILTROWANIE
+    filtered = books
+    if category_filter:
+        filtered = [b for b in filtered if category_filter in b["category"].lower()]
+    if search_query:
+        filtered = [b for b in filtered if search_query in b["title"].lower()]
+
+    # SORTOWANIE
     if sort == "name-asc":
         filtered.sort(key=lambda x: x["title"])
     elif sort == "name-desc":
@@ -66,16 +76,25 @@ def index():
     elif sort == "amount-desc":
         filtered.sort(key=lambda x: x["amount"], reverse=True)
 
-    return render_template("index.html", books=filtered)
+    # PRZEKAZUJEMY TEŻ LICZNIK
+    return render_template("index.html", books=filtered, total=len(filtered))
 
 # === TRASA USUWANIA ===
 @app.route('/delete', methods=['POST'])
 def delete_book():
     key_to_delete = request.form.get("key")
+
+    # Przechwycenie parametrów filtrów
+    search = request.args.get("search", "")
+    category = request.args.get("category", "")
+    sort = request.args.get("sort", "")
+
     if key_to_delete:
         redis_client.delete(key_to_delete)
         redis_client.lrem("books_list", 0, key_to_delete)
-    return redirect(url_for('index'))
+
+    # Przekierowanie z powrotem z tymi samymi parametrami
+    return redirect(url_for('index', search=search, category=category, sort=sort))
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

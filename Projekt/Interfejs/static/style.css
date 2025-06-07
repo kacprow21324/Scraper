@@ -233,3 +233,11 @@ footer {
   border: 1px solid #ccc;
   min-width: 180px;
 }
+#licznik
+{
+  text-align:center;
+  font-weight: bold;
+  font-size: 1.1rem;
+   color: #2c3e50;
+    margin-bottom: 20px;
+}

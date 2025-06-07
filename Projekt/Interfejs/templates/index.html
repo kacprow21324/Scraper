@@ -15,24 +15,28 @@
     <br>
     <button type="submit">Scrapuj</button>
   </form>
+<form method="get" class="filters sort-filter-form" id="sortForm">
 
-  <form method="get" class="filters sort-filter-form" id="sortForm">
-    <label>Sortuj wg:</label>
-    <select name="sort">
-      <option value="">-- wybierz --</option>
-      <option value="name-asc">Nazwa A-Z</option>
-      <option value="name-desc">Nazwa Z-A</option>
-      <option value="price-asc">Cena rosnąco</option>
-      <option value="price-desc">Cena malejąco</option>
-      <option value="amount-asc">Ilość rosnąco</option>
-      <option value="amount-desc">Ilość malejąco</option>
-    </select>
+  <label>Nazwa książki:</label>
+  <input id="searchInput" type="text" name="search" placeholder="np. harry potter" value="{{ request.args.get('search', '') }}">
 
-    <label>Kategoria:</label>
-    <input type="text" name="category" placeholder="np. survivalowa">
-    <button type="submit">Filtruj</button>
-  </form>
+  <label>Kategoria:</label>
+  <input id="categoryInput" type="text" name="category" placeholder="np. horror" value="{{ request.args.get('category', '') }}">
 
+  <label>Sortuj wg:</label>
+  <select name="sort" onchange="this.form.submit()">
+    <option value="">-- wybierz --</option>
+    <option value="name-asc" {% if request.args.get('sort') == 'name-asc' %}selected{% endif %}>Nazwa A-Z</option>
+    <option value="name-desc" {% if request.args.get('sort') == 'name-desc' %}selected{% endif %}>Nazwa Z-A</option>
+    <option value="price-asc" {% if request.args.get('sort') == 'price-asc' %}selected{% endif %}>Cena rosnąco</option>
+    <option value="price-desc" {% if request.args.get('sort') == 'price-desc' %}selected{% endif %}>Cena malejąco</option>
+    <option value="amount-asc" {% if request.args.get('sort') == 'amount-asc' %}selected{% endif %}>Ilość rosnąco</option>
+    <option value="amount-desc" {% if request.args.get('sort') == 'amount-desc' %}selected{% endif %}>Ilość malejąco</option>
+  </select>
+</form>
+    <p id="licznik">
+      Liczba książek: {{ total }}
+    </p>
   <div class="book-grid">
     {% for book in books %}
     <div class="book">
@@ -47,7 +51,7 @@
       <div class="price">Cena: {{ "%.2f"|format(book.price) }} zł</div>
 
       <!-- FORMULARZ USUWANIA -->
-      <form method="post" action="{{ url_for('delete_book') }}" onsubmit="return confirm('Czy na pewno chcesz usunąć tę książkę?');">
+      <form method="post" action="{{ url_for('delete_book', search=request.args.get('search', ''), category=request.args.get('category', ''), sort=request.args.get('sort', '')) }}" onsubmit="return confirm('Czy na pewno chcesz usunąć tę książkę?');">
         <input type="hidden" name="key" value="{{ book.redis_key }}">
         <button type="submit" class="delete-button">Usuń</button>
       </form>
@@ -58,15 +62,35 @@
 
   <footer>
     Autorzy: Kacper Woszczyło 21324 oraz Michał Lepak 21255
-  </footer>
+  </footer> 
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const sortForm = document.getElementById('sortForm');
+    const sortSelect = sortForm.querySelector('select[name="sort"]');
+    const searchInput = document.getElementById('searchInput');
+    const categoryInput = document.getElementById('categoryInput');
 
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const sortSelect = document.querySelector('select[name="sort"]');
-      sortSelect.addEventListener('change', function () {
-        document.getElementById('sortForm').submit();
-      });
+    sortSelect.addEventListener('change', function () {
+      sortForm.submit();
     });
-  </script>
+
+    let debounceTimer;
+
+    function applyFilters() {
+      const url = new URL(window.location.href);
+      url.searchParams.set('search', searchInput.value);
+      url.searchParams.set('category', categoryInput.value);
+      window.location.href = url.toString();
+    }
+
+    function debounceFilter() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(applyFilters, 3000);
+    }
+
+    searchInput.addEventListener('input', debounceFilter);
+    categoryInput.addEventListener('input', debounceFilter);
+  });
+</script>
 </body>
 </html>
