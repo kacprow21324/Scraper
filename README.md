@@ -123,7 +123,6 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - **requests:** Biblioteka Pythona do wykonywania zapytań HTTP, używana w silniku do początkowego pobierania stron (np. w funkcji generate_all_page_urls).
 - **aiohttp:** Asynchroniczny framework HTTP dla Pythona, używany w silniku do wydajnego, współbieżnego pobierania wielu stron internetowych.
 - **urllib.parse:** Moduł Pythona do parsowania URL-i, używany do łączenia ścieżek względnych w pełne adresy URL.
-- **Git:** System kontroli wersji, którego obecność w projekcie jest silnie sugerowana przez pliki takie jak LICENSE i README.md.
 - **Docker Desktop:** Środowisko deweloperskie, które umożliwia uruchamianie i zarządzanie kontenerami Docker oraz lokalnymi klastrami Kubernetes.
 
 ## 🚀 Uruchamianie aplikacji
