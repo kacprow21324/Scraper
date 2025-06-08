@@ -112,14 +112,14 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - * Python 3.x: * Główny język programowania używany zarówno dla logiki silnika scrapującego, jak i interfejsu webowego.
 - * BeautifulSoup: * Biblioteka Pythona do parsowania HTML i XML, niezbędna dla silnika do ekstrakcji danych ze stron internetowych.
 - * asyncio, multiprocessing: * Moduły Pythona służące do zwiększania wydajności. asyncio odpowiada za asynchroniczne operacje I/O (np. pobieranie stron), a multiprocessing umożliwia równoległe przetwarzanie zadań, wykorzystując wiele rdzeni procesora w silniku scrapującym.
-- * Flask: * Lekki framework webowy w Pythonie, użyty do zbudowania interfejsu użytkownika aplikacji.
-- * Redis: * Szybka baza danych działająca w pamięci, wykorzystywana do przechowywania danych książek oraz jako kolejka do komunikacji między interfejsem a silnikiem.
-- * Docker: * Technologia do konteneryzacji aplikacji, umożliwiająca pakowanie każdego komponentu (bazy danych, interfejsu, silnika) w niezależne, przenośne kontenery.
-- * Kubernetes (K8s): * System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do orkiestracji wszystkich komponentów projektu.
-- * HTML & CSS: * Standardowe technologie do tworzenia struktury (HTML) i stylizacji (CSS) interfejsu użytkownika dostępnego przez przeglądarkę.
-- * json: * Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
-- * os: * Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
-- * time: * Moduł Pythona zapewniający funkcje związane z czasem, używany w silniku do krótkich pauz w pętli głównej.
+- **Flask:** Lekki framework webowy w Pythonie, użyty do zbudowania interfejsu użytkownika aplikacji.
+- **Redis:** Szybka baza danych działająca w pamięci, wykorzystywana do przechowywania danych książek oraz jako kolejka do komunikacji między interfejsem a silnikiem.
+- **Docker:** Technologia do konteneryzacji aplikacji, umożliwiająca pakowanie każdego komponentu (bazy danych, interfejsu, silnika) w niezależne, przenośne kontenery.
+- **Kubernetes (K8s):** System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do orkiestracji wszystkich komponentów projektu.
+- **HTML & CSS:** Standardowe technologie do tworzenia struktury (HTML) i stylizacji (CSS) interfejsu użytkownika dostępnego przez przeglądarkę.
+- **json:** Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
+- **os:** Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
+- **time:** Moduł Pythona zapewniający funkcje związane z czasem, używany w silniku do krótkich pauz w pętli głównej.
 
 ## 🚀 Uruchamianie aplikacji
 
