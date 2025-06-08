@@ -115,7 +115,7 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - **Flask:** Lekki framework webowy w Pythonie, użyty do zbudowania interfejsu użytkownika aplikacji.
 - **Redis:** Szybka baza danych działająca w pamięci, wykorzystywana do przechowywania danych książek oraz jako kolejka do komunikacji między interfejsem a silnikiem.
 - **Docker:** Technologia do konteneryzacji aplikacji, umożliwiająca pakowanie każdego komponentu (bazy danych, interfejsu, silnika) w niezależne, przenośne kontenery.
-- **Kubernetes (K8s):** System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do orkiestracji wszystkich komponentów projektu.
+- **Kubernetes (K8s):** System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do połączenia wszystkich komponentów projektu.
 - **HTML & CSS:** Standardowe technologie do tworzenia struktury (HTML) i stylizacji (CSS) interfejsu użytkownika dostępnego przez przeglądarkę.
 - **json:** Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
 - **os:** Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
