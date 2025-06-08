@@ -120,6 +120,11 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - **json:** Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
 - **os:** Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
 - **time:** Moduł Pythona zapewniający funkcje związane z czasem, używany w silniku do krótkich pauz w pętli głównej.
+- **requests:** Biblioteka Pythona do wykonywania zapytań HTTP, używana w silniku do początkowego pobierania stron (np. w funkcji generate_all_page_urls).
+- **aiohttp:** Asynchroniczny framework HTTP dla Pythona, używany w silniku do wydajnego, współbieżnego pobierania wielu stron internetowych.
+- **urllib.parse:** Moduł Pythona do parsowania URL-i, używany do łączenia ścieżek względnych w pełne adresy URL.
+- **Git:** System kontroli wersji, którego obecność w projekcie jest silnie sugerowana przez pliki takie jak LICENSE i README.md.
+- **Docker Desktop:** Środowisko deweloperskie, które umożliwia uruchamianie i zarządzanie kontenerami Docker oraz lokalnymi klastrami Kubernetes.
 
 ## 🚀 Uruchamianie aplikacji
 
