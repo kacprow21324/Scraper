@@ -109,17 +109,17 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 
 ## 🧪 Technologie
 
-- Python 3.x
-- BeautifulSoup
-- asyncio, multiprocessing
-- Flask 
-- Redis
-- Docker
-- Kuberneter
-- HTML && CSS
-- json
-- os
-- time
+- #Python 3.x:# Główny język programowania używany zarówno dla logiki silnika scrapującego, jak i interfejsu webowego.
+- #BeautifulSoup:# Biblioteka Pythona do parsowania HTML i XML, niezbędna dla silnika do ekstrakcji danych ze stron internetowych.
+- #asyncio, multiprocessing:# Moduły Pythona służące do zwiększania wydajności. asyncio odpowiada za asynchroniczne operacje I/O (np. pobieranie stron), a multiprocessing umożliwia równoległe przetwarzanie zadań, wykorzystując wiele rdzeni procesora w silniku scrapującym.
+- #Flask:# Lekki framework webowy w Pythonie, użyty do zbudowania interfejsu użytkownika aplikacji.
+- #Redis:# Szybka baza danych działająca w pamięci, wykorzystywana do przechowywania danych książek oraz jako kolejka do komunikacji między interfejsem a silnikiem.
+- #Docker:# Technologia do konteneryzacji aplikacji, umożliwiająca pakowanie każdego komponentu (bazy danych, interfejsu, silnika) w niezależne, przenośne kontenery.
+- #Kubernetes (K8s):# System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do orkiestracji wszystkich komponentów projektu.
+- #HTML & CSS:# Standardowe technologie do tworzenia struktury (HTML) i stylizacji (CSS) interfejsu użytkownika dostępnego przez przeglądarkę.
+- #json:# Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
+- #os:# Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
+- #time:# Moduł Pythona zapewniający funkcje związane z czasem, używany w silniku do krótkich pauz w pętli głównej.
 
 ## 🚀 Uruchamianie aplikacji
 
@@ -165,6 +165,20 @@ kubectl logs -f deployment/scraper-engine
 # 11. Po zakończeniu scrappingu odświeżyć stronę w przeglądarce i zobacz wyniki.
 ```
 ## 📝 Podsumowanie
+Zrealizowany projekt to nowoczesna, rozproszona aplikacja do web scrapingu, umożliwiająca automatyczne pobieranie danych z witryny Books to Scrape. System został zaprojektowany z naciskiem na modularność, wydajność i skalowalność. Dzięki wykorzystaniu kontenerów Docker oraz orkiestracji w Kubernetes, możliwe jest łatwe wdrażanie i skalowanie aplikacji.
+
+Główne cele projektu zostały zrealizowane:
+✅ pobieranie danych z wielu stron,
+✅ asynchroniczne i wieloprocesowe przetwarzanie,
+✅ dynamiczny interfejs użytkownika,
+✅ sortowanie i filtrowanie danych w czasie rzeczywistym,
+✅ przechowywanie danych w pamięci (Redis),
+✅ pełna separacja modułów w kontenerach.
+
+Projekt pokazuje praktyczne zastosowanie technologii takich jak Python, Flask, BeautifulSoup, Redis, Docker i Kubernetes w kontekście przetwarzania danych i budowy aplikacji webowej. Aplikacja może być rozszerzana o kolejne źródła danych, nowe funkcje analityczne oraz rozbudowany backend
+
+
+
 
 ---
 
