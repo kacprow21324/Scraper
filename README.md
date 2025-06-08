@@ -168,12 +168,12 @@ kubectl logs -f deployment/scraper-engine
 Zrealizowany projekt to nowoczesna, rozproszona aplikacja do web scrapingu, umożliwiająca automatyczne pobieranie danych z witryny Books to Scrape. System został zaprojektowany z naciskiem na modularność, wydajność i skalowalność. Dzięki wykorzystaniu kontenerów Docker oraz orkiestracji w Kubernetes, możliwe jest łatwe wdrażanie i skalowanie aplikacji.
 
 Główne cele projektu zostały zrealizowane:
-✅ pobieranie danych z wielu stron,
-✅ asynchroniczne i wieloprocesowe przetwarzanie,
-✅ dynamiczny interfejs użytkownika,
-✅ sortowanie i filtrowanie danych w czasie rzeczywistym,
-✅ przechowywanie danych w pamięci (Redis),
-✅ pełna separacja modułów w kontenerach.
+- ✅ pobieranie danych z wielu stron
+- ✅ asynchroniczne i wieloprocesowe przetwarzanie
+- ✅ dynamiczny interfejs użytkownika
+- ✅ sortowanie i filtrowanie danych w czasie rzeczywistym
+- ✅ przechowywanie danych w pamięci (Redis)
+- ✅ pełna separacja modułów w kontenerach
 
 Projekt pokazuje praktyczne zastosowanie technologii takich jak Python, Flask, BeautifulSoup, Redis, Docker i Kubernetes w kontekście przetwarzania danych i budowy aplikacji webowej. Aplikacja może być rozszerzana o kolejne źródła danych, nowe funkcje analityczne oraz rozbudowany backend
 
