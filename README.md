@@ -46,6 +46,12 @@ Niniejsza aplikacja to rozproszony system do **automatycznego pobierania, selekc
    - Na stronie WWW jest dostępne pole tekstowe (filtr kategorii),  
    - Użytkownik może wpisać fragment nazwy kategorii (np. „travel”, „science”),  
    - System wyświetli tylko te książki, których kategoria zawiera wpisaną frazę (ignorując wielkość liter).
+➡️ **Wyszukiwanie książek po nazwie**
+-Dostępna jest wyszukiwarka umożliwiająca filtrowanie książek na podstawie tytułu,
+-Wyszukiwanie jest niewrażliwe na wielkość liter oraz działa w czasie rzeczywistym.
+➡️ **Automatyczny licznik książek**
+-Interfejs wyświetla całkowitą liczbę znalezionych książek zgodnych z aktualnymi filtrami i wyszukiwaniem,
+-Licznik aktualizuje się automatycznie przy każdej zmianie parametrów (sortowanie, filtrowanie, wyszukiwanie).
 
 ## 📁 Struktura repozytorium
 
