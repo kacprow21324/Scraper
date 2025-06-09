@@ -117,7 +117,6 @@ Projekt zakłada **modularną, kontenerową architekturę**, która składa się
 - **Docker:** Technologia do konteneryzacji aplikacji, umożliwiająca pakowanie każdego komponentu (bazy danych, interfejsu, silnika) w niezależne, przenośne kontenery.
 - **Kubernetes (K8s):** System do automatyzacji wdrażania, skalowania i zarządzania skonteneryzowanymi aplikacjami, użyty do połączenia wszystkich komponentów projektu.
 - **HTML & CSS:** Standardowe technologie do tworzenia struktury (HTML) i stylizacji (CSS) interfejsu użytkownika dostępnego przez przeglądarkę.
-- **json:** Moduł Pythona do pracy z formatem danych JSON, wykorzystywany do serializacji i deserializacji danych przechowywanych w Redis.
 - **os:** Moduł Pythona do interakcji z systemem operacyjnym, często używany do zarządzania zmiennymi środowiskowymi (np. konfiguracja połączenia z Redis).
 - **time:** Moduł Pythona zapewniający funkcje związane z czasem, używany w silniku do krótkich pauz w pętli głównej.
 - **requests:** Biblioteka Pythona do wykonywania zapytań HTTP, używana w silniku do początkowego pobierania stron (np. w funkcji generate_all_page_urls).
